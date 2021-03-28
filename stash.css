@@ -1,0 +1,99 @@
+body {
+    font-family: sans-serif;
+}
+button {
+    padding: 5px 10px;
+    font-weight: 700;
+    font-size: 1.5em;
+}
+
+form>div {
+    padding-top: 20px;
+}
+#stash {
+    display: flex;
+}
+form {
+    font-size: 1.2em;
+}
+form label {
+    display: block;
+    font-size: 1.3em;
+    font-weight: 700;
+}
+form select {
+    font-size: 1.2em;
+    padding: 15px;
+    overflow-y: auto;
+}
+.items {
+    display: flex;
+    flex-wrap: wrap;
+    list-style-type: none;
+    padding: 0;
+}
+
+.item {
+    border: 3px solid #ccc;
+    border-radius: 5px;
+    margin: 10px;
+}
+h3 {
+    background: black;
+    padding: 8px 15px;
+    margin: 0;
+}
+.quality-normal {
+    color: white;
+}
+.quality-superior {
+    color: lightgray;
+}
+.quality-magic {
+    color: cornflowerblue;
+}
+.quality-rare {
+    color: yellow;
+}
+.quality-set {
+    color: lightgreen;
+}
+.quality-unique {
+    color: darkgoldenrod;
+}
+.gem-diamond, .gem-flawlessdiamond {
+    color: white;
+}
+.gem-sapphire, .gem-flawlesssapphire {
+    color: #0f52ba
+}
+.gem-ruby, .gem-flawlessruby {
+    color: red;
+}
+.gem-amethyst, .gem-flawlessamethyst {
+    color: #9966cc;
+}
+.gem-topaz, .gem-flawlesstopaz {
+    color: #ffc87c;
+}
+.gem-emerald, .gem-flawlessemerald {
+    color: #50c878;
+}
+.gem-skull, .gem-flawlessskull {
+    color: lightgray;
+}
+.rune {
+    color: burlywood
+}
+.stat-list {
+    margin: 10px 0;
+    padding: 10px;
+    list-style-type: none;
+    background: #ccc;
+}
+form label {
+    margin-top: 20px;
+}
+#searchAll {
+    padding: 5px;
+}

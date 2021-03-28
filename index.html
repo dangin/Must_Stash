@@ -2,18 +2,26 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <title>Hello World!</title>
+    <title>Must Stash!</title>
+    <link rel="stylesheet" href="stash.css">
   </head>
   <body>
-    <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
-
-    <!-- You can also require other files to run in this process -->
+    <h1>Must Stash!</h1>
+    <button class="refresh">Refresh data</button>
+    <div id="stash">
+      <form>
+        <label for="searchAll">Search</label>
+        <input type="text" id="searchAll">
+        <label for="account">Account</label>
+        <select name="account" size="1" multiple></select>
+        <label for="character">Character</label>
+        <select name="character" size="1"></select>
+      </form>
+      <ul class="items"></ul>
+    </div>
     <script src="./renderer.js"></script>
+    <script src="./stashReader.js"></script>
   </body>
 </html>
