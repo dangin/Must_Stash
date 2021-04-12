@@ -8,7 +8,7 @@ let stashFolder
 
 ipcMain.on('load-data', async function (event, arg) {
     if (!stashFolder) {
-        dialog.showMessageBoxSync(focussedWindow, { message: 'Please select the stash folder in the project diablo 2 folder' })
+        dialog.showMessageBoxSync(focussedWindow, { message: 'Please select the stash folder in the Project Diablo 2 folder', title:'Project Diablo 2 Stash directory' })
         const result = dialog.showOpenDialogSync(focussedWindow, { properties: ['openDirectory'] })
         if (!result.canceled) {
             stashFolder = result[0] + '\\'
