@@ -4,4 +4,5 @@ TODO
     
     Provide image baseline for items.
 
-
+build command
+    electron-packager . must_stash --platform=win32 --arch=x64
