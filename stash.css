@@ -1,6 +1,16 @@
 body {
     font-family: sans-serif;
 }
+.left {
+    position: fixed;
+    padding: 10px;
+    left:0;
+    top:0;
+    width: 250px;
+}
+.right {
+    margin-left: 250px;
+}
 button {
     padding: 5px 10px;
     font-weight: 700;

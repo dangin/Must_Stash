@@ -1,0 +1,7 @@
+TODO
+    Provide a list of properties as guide for searching (could have a list of dedected items with the property)
+        related: provide a link in items to other items available with that property
+    
+    Provide image baseline for items.
+
+

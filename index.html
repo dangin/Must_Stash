@@ -2,26 +2,33 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="Content-Security-Policy" content="img-src 'self' data:; default-src 'self'; script-src 'self'">
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+
     <title>Must Stash!</title>
     <link rel="stylesheet" href="stash.css">
+    <link rel="stylesheet" href="node_modules/toastr/build/toastr.min.css">
   </head>
   <body>
-    <h1>Must Stash!</h1>
-    <button class="refresh">Refresh data</button>
-    <div id="stash">
-      <form>
-        <label for="searchAll">Search</label>
-        <input type="text" id="searchAll">
-        <label for="account">Account</label>
-        <select name="account" size="1" multiple></select>
-        <label for="character">Character</label>
-        <select name="character" size="1"></select>
-      </form>
+    <div class="left">
+      <h1>Must Stash!</h1>
+      <button class="refresh">Reload files</button>
+      <div id="stash">
+        <form>
+          <label for="searchAll">Search</label>
+          <input type="text" id="searchAll">
+          <label for="account">Account</label>
+          <select name="account" size="1" multiple></select>
+          <label for="character">Character</label>
+          <select name="character" size="1"></select>
+        </form>
+      </div>
+    </div>
+    <div class="right">
       <ul class="items"></ul>
     </div>
     <script src="./renderer.js"></script>
     <script src="./stashReader.js"></script>
+    <script src="node_modules/toastr/build/toastr.min.js"></script>
   </body>
 </html>

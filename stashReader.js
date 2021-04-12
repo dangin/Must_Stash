@@ -1,43 +1,62 @@
-const glob = require('glob')
-const fs = require('fs')
+const fs = require('fs');
+const { clipboard, electron, dialog } = require('electron');
+const toastr = require('toastr');
+const ipcRenderer = require('electron');
+const ipc = ipcRenderer.ipcRenderer
 
-let stashes = {};
-document.querySelector('button.refresh').onclick = loadData
-document.querySelector('button.refresh').click()
+toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-bottom-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+  }
+
+
+
+let stashes;
+ipc.on('request-stash-folder-location', function (event, data) {
+    ipc.send('set-stash-location', prompt('folder location?'))
+})
+
+ipc.on('stash-data', function (event, data) {
+    console.log('stash-data',data)
+    stashes = data
+    accountSelect();
+})
 
 function loadData() {
-    console.log('loading data...')
-    glob("../*.txt", function (err, files) {
-        files.forEach( (fileName) => {
-            try {   
-                let fn = fileName.match('\.\./(.*)\.txt')[1];
-                let accountName = fn.split('_')[0];
-                let characterName = fn.split('_')[1];
-                let data = fs.readFileSync(fileName, 'utf-8')
-                console.log('reading... ',fn)
-                let stash = JSON.parse(data);
-                if (!stashes[accountName]) stashes[accountName] = {}
-                stashes[accountName][characterName] = stash;
-            } catch(e) {
-                console.error(e);
-            }
-        })
-        accountSelect();
-    })   
+    ipc.send('load-data')
 }
+
+document.querySelector('button.refresh').onclick = loadData
+document.querySelector('button.refresh').click()
+document.querySelector('form').onsubmit = function() { return false }
+
+
 
 let accountSelectElem = document.querySelector('select[name=account]')
 accountSelectElem.onchange = characterSelect
 
 function accountSelect() {
     accountSelectElem.options.length = 0
-    for (var a in stashes) {
+    stashes.forEach((obj,a) => {
         let o = document.createElement('option')
         o.value = a
         o.innerHTML = a
         accountSelectElem.appendChild(o)
-    }
-    accountSelectElem.size = Object.keys(stashes).length
+    })
+    accountSelectElem.size = stashes.size
     accountSelectElem.onchange()
 }
 
@@ -45,15 +64,15 @@ let characterSelectElem = document.querySelector('select[name=character]')
 characterSelectElem.onchange = loadStash
 function characterSelect() {
     characterSelectElem.options.length = 0
+    if (accountSelectElem.selectedOptions.length <= 0) { return }
     let account = accountSelectElem.selectedOptions[0].value
-    
-    for (var a in stashes[account]) {
+    stashes.get(account).forEach((obj,a) => {
         let o = document.createElement('option')
         o.value = a
         o.innerHTML = a
         characterSelectElem.appendChild(o)
-    }
-    characterSelectElem.size = Object.keys(stashes[account]).length
+    })
+    characterSelectElem.size = stashes.get(account).size
     characterSelectElem.onchange()
 }
 
@@ -62,16 +81,19 @@ function loadStash() {
     let character = characterSelectElem.selectedOptions[0].value
 
     stashElem.innerHTML = ''
-    stashes[account][character].forEach((i) => {displayItem(i)})
+    stashes.get(account).get(character).forEach((i) => { displayItem(i) })
 }
-
+function copyToItemToClipboard(item) {
+    clipboard.writeText(JSON.stringify(item))
+    toastr.info('Item copied to clipboard')
+}
 let stashElem = document.querySelector('ul.items')
 function displayItem(item,owner) {
-    console.log('hmhmm',arguments)
     let li = document.createElement('li')
     li.classList.add('item')
     
     let title = document.createElement('h3')
+    title.onclick = copyToItemToClipboard.bind(this,item)
     title.innerHTML = item['name'] || item['type'] 
     title.classList.add('quality-'+item['quality'].toLowerCase())
     if (owner) {
@@ -137,16 +159,16 @@ function searchForItem() {
 
 function searchAll(words) {
     let found = []
-    for (let account in stashes) {
+    stashes.forEach((obj,account) => {
         found.push(...searchAccount(account,words))
-    }
+    })
     return found;
 }
 function searchAccount(account,words) {
     let found = []
-    for (let character in stashes[account]) {
+    stashes.get(account).forEach((obj, character) => {
         found.push(...searchCharacter(account,character,words))
-    }
+    })
     return found
 }
 
@@ -163,7 +185,7 @@ function searchCharacter(account, character, words) {
         return '(?=.*'+w+')'
     })
     let regx = new RegExp(moddedWords.join(''),'gi')
-    stashes[account][character].forEach((item)=>{
+    stashes.get(account).get(character).forEach((item)=>{
         let s = flattenItemString(item)
         if (s.match(regx)) {
             found.push(new SearchResult(account, character, item))
