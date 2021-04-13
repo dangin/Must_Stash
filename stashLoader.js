@@ -33,7 +33,7 @@ function loadData() {
         try {
             let fn = fileName.match('.*/(.*)\.txt')[1]
             let accountName = fn.split('_')[0]
-            let characterName = fn.split('_')[1]
+            let characterName = fn.split(/_(.+)/)[1]
             let data = fs.readFileSync(fileName, 'utf-8')
             console.log('reading... ', fn)
             let stash = JSON.parse(data)
